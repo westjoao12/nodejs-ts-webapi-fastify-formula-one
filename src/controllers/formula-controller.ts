@@ -2,15 +2,9 @@ import { FastifyRequest, FastifyReply} from "fastify"
 import { uStatusCode } from "../utils/uStatusCode";
 import { ITeams } from "../models/interfaces/ITeams";
 import { IResponseService } from "../models/interfaces/IResponseService";
-import {getTeams, getTeamsById} from "../services/formula-service";
-
-const drivers = [
-    { id: 1, name: "Lewis Hamilton", teamId: 4 },
-    { id: 2, name: "Max Verstappen", teamId: 3 },
-    { id: 3, name: "Charles Leclerc", teamId: 2 },
-    { id: 4, name: "Lando Norris", teamId: 1 },
-    { id: 5, name: "Fernando Alonso", teamId: 5 }
-]
+import {getTeams, getTeamsById} from "../services/team-service";
+import { IDrivers } from "../models/interfaces/IDrivers";
+import { getDrivers, getDriversById } from "../services/driver-service";
 
 export const teamsControllers = async (request: FastifyRequest, response: FastifyReply) =>{
 
@@ -37,17 +31,24 @@ export const teamsFilterController = async (request: FastifyRequest, response: F
 };
 
 export const driversControllers = async (request: FastifyRequest, response: FastifyReply) =>{
-    response.type('application/json').code(uStatusCode.OK).send({drivers});
+
+    const resposeService: IResponseService<IDrivers> = await getDrivers();
+
+    if (resposeService.statusCode !== uStatusCode.OK) {
+        return response.type('application/json').code(resposeService.statusCode).send({ error: 'Error fetching drivers' });
+    }
+    response.type('application/json').code(resposeService.statusCode).send(resposeService.data);
 };
 
 export const driversFilterControllers = async (request: FastifyRequest, response: FastifyReply)=>{
     const { id } = request.params as { id: string };
     const _id =parseInt(id);
-    const driver = drivers.find(d => d.id === _id);
+    
+    const responseService: IResponseService<IDrivers> = await getDriversById(_id);
 
-    if(driver) {
-        response.type('application/json').code(uStatusCode.OK).send(driver);
+    if(responseService.statusCode === uStatusCode.OK) {
+        response.type('application/json').code(responseService.statusCode).send(responseService.data);
     } else {
-        response.type('application/json').code(uStatusCode.NOT_FOUND).send({ error: 'Driver not found' });
+        response.type('application/json').code(responseService.statusCode).send({ error: 'Driver not found' });
     }
 };
