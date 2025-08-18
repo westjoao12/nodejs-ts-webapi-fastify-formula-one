@@ -1,4 +1,5 @@
 import { FastifyRequest, FastifyReply} from "fastify"
+import { uStatusCode } from "../utils/uStatusCode";
 
 const teams = [
     { id: 1, name: "McLaren", base: "Woking, UK" },
@@ -17,7 +18,7 @@ const drivers = [
 ]
 
 export const teamsControllers = async (request: FastifyRequest, response: FastifyReply) =>{
-    response.type('application/json').code(200).send({teams});
+    response.type('application/json').code(uStatusCode.OK).send({teams});
 };
 
 export const teamsFilterController = async (request: FastifyRequest, response: FastifyReply) => {
@@ -26,18 +27,14 @@ export const teamsFilterController = async (request: FastifyRequest, response: F
     const team = teams.find(t => t.id === teamId);
     
     if (team) {
-        response.type('application/json').code(200).send(team);
+        response.type('application/json').code(uStatusCode.OK).send(team);
     } else {
-        response.type('application/json').code(404).send({ error: 'Team not found' });
+        response.type('application/json').code(uStatusCode.NOT_FOUND).send({ error: 'Team not found' });
     }
 };
 
 export const driversControllers = async (request: FastifyRequest, response: FastifyReply) =>{
-    response.type('application/json').code(200).send({drivers});
-};
-
-interface DriverParams {
-    id: string;
+    response.type('application/json').code(uStatusCode.OK).send({drivers});
 };
 
 export const driversFilterControllers = async (request: FastifyRequest, response: FastifyReply)=>{
@@ -46,8 +43,8 @@ export const driversFilterControllers = async (request: FastifyRequest, response
     const driver = drivers.find(d => d.id === _id);
 
     if(driver) {
-        response.type('application/json').code(200).send(driver);
+        response.type('application/json').code(uStatusCode.OK).send(driver);
     } else {
-        response.type('application/json').code(404).send({ error: 'Driver not found' });
+        response.type('application/json').code(uStatusCode.NOT_FOUND).send({ error: 'Driver not found' });
     }
 };
