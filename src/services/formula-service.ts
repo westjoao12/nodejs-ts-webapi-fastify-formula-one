@@ -18,7 +18,7 @@ const drivers = [
     { id: 5, name: "Fernando Alonso", teamId: 5 }
 ]
 
-const responseService: IResponseService = {
+const responseService: IResponseService<ITeams> = {
     statusCode: uStatusCode.NOT_FOUND,
     data: [{
         id: 0,
@@ -27,14 +27,14 @@ const responseService: IResponseService = {
     }]
 };
 
-export const getTeams = async (): Promise<IResponseService> => {
+export const getTeams = async (): Promise<IResponseService<ITeams>> => {
     responseService.statusCode = uStatusCode.OK;
     responseService.data = teams;
 
     return responseService;
 };
 
-export const getTeamsById = async (id:number) : Promise<IResponseService> => {
+export const getTeamsById = async (id:number) : Promise<IResponseService<ITeams>> => {
     const team = teams.find(t => t.id === id);
     if (team) {
         responseService.statusCode = uStatusCode.OK;

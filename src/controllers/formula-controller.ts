@@ -4,14 +4,6 @@ import { ITeams } from "../models/interfaces/ITeams";
 import { IResponseService } from "../models/interfaces/IResponseService";
 import {getTeams, getTeamsById} from "../services/formula-service";
 
-const teams = [
-    { id: 1, name: "McLaren", base: "Woking, UK" },
-    { id: 2, name: "Ferrari", base: "Maranello, Italy" },
-    { id: 3, name: "Red Bull Racing", base: "Milton Keynes, UK" },
-    { id: 4, name: "Mercedes", base: "Brackley, UK" },
-    { id: 5, name: "Alpine", base: "Enstone, UK" }
-]
-
 const drivers = [
     { id: 1, name: "Lewis Hamilton", teamId: 4 },
     { id: 2, name: "Max Verstappen", teamId: 3 },
@@ -22,7 +14,7 @@ const drivers = [
 
 export const teamsControllers = async (request: FastifyRequest, response: FastifyReply) =>{
 
-    const responseService: IResponseService = await getTeams();
+    const responseService: IResponseService<ITeams> = await getTeams();
 
     if (responseService.statusCode !== uStatusCode.OK) {
         return response.type('application/json').code(responseService.statusCode).send({ error: 'Error fetching teams' });
@@ -31,10 +23,11 @@ export const teamsControllers = async (request: FastifyRequest, response: Fastif
 };
 
 export const teamsFilterController = async (request: FastifyRequest, response: FastifyReply) => {
+
     const { id } = request.params as { id: string };
     const teamId = parseInt(id);
 
-    const responseService: IResponseService = await getTeamsById(teamId);
+    const responseService: IResponseService<ITeams> = await getTeamsById(teamId);
     
     if (responseService.statusCode === uStatusCode.OK) {
         response.type('application/json').code(responseService.statusCode).send(responseService.data);

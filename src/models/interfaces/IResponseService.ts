@@ -1,6 +1,6 @@
 import { ITeams } from "./ITeams";
 
-export interface IResponseService {
+export interface IResponseService<T> {
     statusCode: number;
-    data: [] | ITeams[] | ITeams;
+    data: [] | T[] | T;
 }
