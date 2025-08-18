@@ -1,14 +1,10 @@
 import { IResponseService } from '../models/interfaces/IResponseService';
 import { ITeams } from '../models/interfaces/ITeams';
 import { uStatusCode } from '../utils/uStatusCode';
+import { teamRepository } from '../repositories/team-Repository';
 
-const teams = [
-    { id: 1, name: "McLaren", base: "Woking, UK" },
-    { id: 2, name: "Ferrari", base: "Maranello, Italy" },
-    { id: 3, name: "Red Bull Racing", base: "Milton Keynes, UK" },
-    { id: 4, name: "Mercedes", base: "Brackley, UK" },
-    { id: 5, name: "Alpine", base: "Enstone, UK" }
-]
+// Simulating a database with in-memory data
+const _teamRepository: ITeams[] = teamRepository;
 
 const responseService: IResponseService<ITeams> = {
     statusCode: uStatusCode.NOT_FOUND,
@@ -21,13 +17,15 @@ const responseService: IResponseService<ITeams> = {
 
 export const getTeams = async (): Promise<IResponseService<ITeams>> => {
     responseService.statusCode = uStatusCode.OK;
-    responseService.data = teams;
+    responseService.data = _teamRepository;
 
     return responseService;
 };
 
 export const getTeamsById = async (id:number) : Promise<IResponseService<ITeams>> => {
-    const team = teams.find(t => t.id === id);
+
+    const team = _teamRepository.find(t => t.id === id);
+
     if (team) {
         responseService.statusCode = uStatusCode.OK;
         // Clear previous data and push the found team
