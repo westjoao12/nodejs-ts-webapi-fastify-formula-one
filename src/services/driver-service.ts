@@ -25,8 +25,6 @@ const _driverRepository: IDrivers[] =
 //const _driverRepository: IDrivers[] = driverRepository;
 
 
-console.log(`Driver repository initialized with ${_driverRepository.length} drivers.`);
-
 const responseService: IResponseService<IDrivers> = {
     statusCode: uStatusCode.NOT_FOUND,
     data: [{
