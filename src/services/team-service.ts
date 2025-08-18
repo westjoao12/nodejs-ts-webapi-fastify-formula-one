@@ -10,14 +10,6 @@ const teams = [
     { id: 5, name: "Alpine", base: "Enstone, UK" }
 ]
 
-const drivers = [
-    { id: 1, name: "Lewis Hamilton", teamId: 4 },
-    { id: 2, name: "Max Verstappen", teamId: 3 },
-    { id: 3, name: "Charles Leclerc", teamId: 2 },
-    { id: 4, name: "Lando Norris", teamId: 1 },
-    { id: 5, name: "Fernando Alonso", teamId: 5 }
-]
-
 const responseService: IResponseService<ITeams> = {
     statusCode: uStatusCode.NOT_FOUND,
     data: [{
