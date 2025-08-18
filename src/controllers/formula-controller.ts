@@ -1,5 +1,8 @@
 import { FastifyRequest, FastifyReply} from "fastify"
 import { uStatusCode } from "../utils/uStatusCode";
+import { ITeams } from "../models/interfaces/ITeams";
+import { IResponseService } from "../models/interfaces/IResponseService";
+import {getTeams, getTeamsById} from "../services/formula-service";
 
 const teams = [
     { id: 1, name: "McLaren", base: "Woking, UK" },
@@ -18,18 +21,25 @@ const drivers = [
 ]
 
 export const teamsControllers = async (request: FastifyRequest, response: FastifyReply) =>{
-    response.type('application/json').code(uStatusCode.OK).send({teams});
+
+    const responseService: IResponseService = await getTeams();
+
+    if (responseService.statusCode !== uStatusCode.OK) {
+        return response.type('application/json').code(responseService.statusCode).send({ error: 'Error fetching teams' });
+    }
+    response.type('application/json').code(responseService.statusCode).send(responseService.data);
 };
 
 export const teamsFilterController = async (request: FastifyRequest, response: FastifyReply) => {
     const { id } = request.params as { id: string };
     const teamId = parseInt(id);
-    const team = teams.find(t => t.id === teamId);
+
+    const responseService: IResponseService = await getTeamsById(teamId);
     
-    if (team) {
-        response.type('application/json').code(uStatusCode.OK).send(team);
+    if (responseService.statusCode === uStatusCode.OK) {
+        response.type('application/json').code(responseService.statusCode).send(responseService.data);
     } else {
-        response.type('application/json').code(uStatusCode.NOT_FOUND).send({ error: 'Team not found' });
+        response.type('application/json').code(responseService.statusCode).send({ error: 'Team not found' });
     }
 };
 
