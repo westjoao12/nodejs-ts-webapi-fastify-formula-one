@@ -13,6 +13,6 @@ export const findAllTeams = async (): Promise<ITeams[]> => {
     return teamRepository;
 }
 
-export const findTeamById = (id: number): ITeams | undefined => {
+export const findTeamById = async (id: number): Promise<ITeams | undefined> => {
     return teamRepository.find(team => team.id === id);
 }

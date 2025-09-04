@@ -18,23 +18,14 @@ const responseService: IResponseService<ITeams> = {
 export const getTeams = async (): Promise<IResponseService<ITeams>> => {
     responseService.statusCode = uStatusCode.OK;
 
-    console.log("Antes do findAllTeams");
-    console.log(responseService.data);
-
-    console.log(`Chamando findAllTeams ${teamRepository.findAllTeams()}`);
     responseService.data = await teamRepository.findAllTeams();
-
-    console.log("Depois do findAllTeams");
-    console.log(responseService.data);
-    console.log(responseService.statusCode);
-    console.log(responseService);
 
     return responseService;
 };
 
 export const getTeamsById = async (id:number) : Promise<IResponseService<ITeams>> => {
 
-    const team = teamRepository.findTeamById(id);
+    const team = await teamRepository.findTeamById(id);
 
     if (team) {
         responseService.statusCode = uStatusCode.OK;

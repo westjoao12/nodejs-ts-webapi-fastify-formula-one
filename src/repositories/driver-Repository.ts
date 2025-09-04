@@ -12,3 +12,11 @@ export const driverRepository: IDrivers[] = [
     { id: 9, name: "Oscar Piastri", teamId: 1 },
     { id: 10, name: "George Russell", teamId: 4 }
 ]
+
+export const findAllDrivers = async () : Promise<IDrivers[]> => {
+    return driverRepository;
+}
+
+export const findDriversById = async (id: number) : Promise <IDrivers | undefined> => {
+    return driverRepository.find(driver => driver.id === id);
+}
