@@ -1,10 +1,10 @@
 import { IResponseService } from '../models/interfaces/IResponseService';
 import { ITeams } from '../models/interfaces/ITeams';
 import { uStatusCode } from '../utils/uStatusCode';
-import { teamRepository } from '../repositories/team-Repository';
+import * as teamRepository from '../repositories/team-Repository';
 
 // Simulating a database with in-memory data
-const _teamRepository: ITeams[] = teamRepository;
+//const _teamRepository: ITeams[] = teamRepository;
 
 const responseService: IResponseService<ITeams> = {
     statusCode: uStatusCode.NOT_FOUND,
@@ -17,14 +17,24 @@ const responseService: IResponseService<ITeams> = {
 
 export const getTeams = async (): Promise<IResponseService<ITeams>> => {
     responseService.statusCode = uStatusCode.OK;
-    responseService.data = _teamRepository;
+
+    console.log("Antes do findAllTeams");
+    console.log(responseService.data);
+
+    console.log(`Chamando findAllTeams ${teamRepository.findAllTeams()}`);
+    responseService.data = await teamRepository.findAllTeams();
+
+    console.log("Depois do findAllTeams");
+    console.log(responseService.data);
+    console.log(responseService.statusCode);
+    console.log(responseService);
 
     return responseService;
 };
 
 export const getTeamsById = async (id:number) : Promise<IResponseService<ITeams>> => {
 
-    const team = _teamRepository.find(t => t.id === id);
+    const team = teamRepository.findTeamById(id);
 
     if (team) {
         responseService.statusCode = uStatusCode.OK;
