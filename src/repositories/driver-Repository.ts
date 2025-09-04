@@ -1,6 +1,6 @@
 import { IDrivers } from "../models/interfaces/IDrivers";
 
-export const driverRepository: IDrivers[] = [
+const driverRepository: IDrivers[] = [
     { id: 1, name: "Lewis Hamilton", teamId: 4 },
     { id: 2, name: "Max Verstappen", teamId: 3 },
     { id: 3, name: "Charles Leclerc", teamId: 2 },
